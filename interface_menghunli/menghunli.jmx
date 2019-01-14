@@ -112,7 +112,7 @@ if (prev_result  !=  null  &amp;&amp; !prev_result.isSuccessful())
 	vars.putObject(&quot;ANYSAMPLEFAIL&quot;, true);
 	if (increment.intValue() &lt; (maxloop.intValue()-1))
 	{
-		prev_result.setSuccessful(false);
+		prev_result.setSuccessful(true);
 	}		
 }</stringProp>
               <stringProp name="BeanShellAssertion.filename"></stringProp>
