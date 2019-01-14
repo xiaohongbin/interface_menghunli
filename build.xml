@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ant-jmeter-test" default="run" basedir=".">
+    <tstamp>
+        <format property="time" pattern="yyyy-MM-dd_HH_mm" locale="zh" timezone="Asia/Shanghai"/>
+    </tstamp>
+    <!-- 需要改成自己本地的 Jmeter 目录-->  
+    <property name="jmeter.home" value="/usr/jmeter" />
+    
+	<!--脚本路径 -->
+	<property name="menghunli_script" value="./interface_menghunli"/>
+	
+
+	<!--报告存放根目录-->
+	<property name="jmeter.report" value="/home/workspace/QA"/>
+	<!-- 原始jtl报告存放-->
+	<property name="jmeter.report.jtl" value="${jmeter.report}/jtl"/>
+	<!--转换成html 至Apache服务器下，通过浏览器访问-->
+	<property name="jmeter.report.html" value="${jmeter.report}/html"/>
+	
+
+	<!-- 生成的报告-->  
+    <property name="menghunli.ReportName" value="menghunli_InterFace_TestReport_" />
+    <property name="menghunli.jmeter.result.jtlName" value="${jmeter.report.jtl}/${menghunli.ReportName}${time}.jtl" />
+    <property name="menghunli.jmeter.result.htmlName" value="${jmeter.report.html}/${menghunli.ReportName}${time}.html" />
+	<property name="menghunli.report.title" value="${time}--梦婚礼--接口扫描结果"/>
+	
+	
+	
+	
+    <!--任务列表-->
+    <target name="run">
+        <antcall target="menghunli_test" />
+		<antcall target="menghunli_report" />
+		<antcall target="sendEmail"/>
+    </target>
+	
+    <!--运行任务-->
+    <target name="menghunli_test">
+        <taskdef name="jmeter" classname="org.programmerplanet.ant.taskdefs.jmeter.JMeterTask" />
+		<!--指定 jmeter环境，输出jtl结果路径-->
+        <jmeter jmeterhome="${jmeter.home}" resultlog="${menghunli.jmeter.result.jtlName}">
+            <!-- 指定脚本路径。"*.jmx"指包含此目录下的所有jmeter脚本-->
+            <testplans dir="${menghunli_script}" includes="*.jmx" />
+			<property name="jmeter.save.saveservice.output_format" value="xml"/>
+        </jmeter>
+    </target>
+        
+	
+	<path id="xslt.classpath">
+        <fileset dir="${jmeter.home}/lib" includes="xalan*.jar"/>
+        <fileset dir="${jmeter.home}/lib" includes="serializer*.jar"/>
+    </path>
+	
+	<!--生成report-->
+    <target name="menghunli_report">
+        <tstamp><format property="report.datestamp" pattern="yyyy-MM-dd_HH_mm" locale="zh" timezone="Asia/Shanghai"/></tstamp>
+        <!-- in 读取jtl，out 输出html，style 套用模板 -->
+		<xslt
+            classpathref="xslt.classpath"
+            force="true"
+            in="${menghunli.jmeter.result.jtlName}"
+            out="${menghunli.jmeter.result.htmlName}"
+            style="${jmeter.home}/extras/jmeter-results-report-loadtest.xsl">
+            <param name="showData" expression="${show-data}"/>
+            <param name="titleReport" expression="${menghunli.report.title}"/>
+            <param name="dateReport" expression="${report.datestamp}"/>
+        </xslt>
+		<copy todir="${menghunli.jmeter.result.html}">
+            <fileset dir="${jmeter.home}/extras">
+                <include name="collapse.png" />
+                <include name="expand.png" />
+            </fileset>
+        </copy>
+    </target>
+	
+	<!-- 发送邮件任务 -->
+	<!--邮件相关配置-->
+	<!-- 邮件接收人-->
+	<property name="mail_to" value="yaow@youyuan.com,xiaohongbin@youyuan.com"/>
+	<!-- 邮件主题 -->
+	<property name="subject.title" value="${time} 梦婚礼接口扫描结果" />
+	<!-- 指定域名，用于拼接邮件内容-->
+	<property name="reportHost" value="qa.yaowang.123.cn"/>
+	<!--发送邮件操作-->
+	<target name="sendEmail">
+		<mail mailhost="smtp.qq.com"
+				user="1243956263@qq.com"
+				password="eeywqoefalhrgjdb"   
+				mailport="25" 
+				ssl="false"  
+				from="1243956263@qq.com"
+				messagemimetype="text/html" 
+				tolist="${mail_to}"
+				subject="${subject.title}">
+			 <attachments >
+                <fileset dir="${jmeter.report.html}">
+                    <include name="${menghunli.ReportName}${time}.html" />					
+                </fileset>
+				
+            </attachments>
+			
+			<message>
+			${time} 梦婚礼接口扫描结果，详见附件
+			</message>
+		</mail>
+	</target>
+	
+</project>
