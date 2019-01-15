@@ -1,5 +1,5 @@
 首页按阶段推荐的新娘日记	/app/api/article/getRecommendDiary	{"pageSize":10,"pageNum":1,"tagId":0}	"msg":"成功"
-新娘日记详情页	/app/api/article/ArticleAction_getDiaryDetailInfo	{"articleId":30937596936272}	"msg":"1成功"
+新娘日记详情页	/app/api/article/ArticleAction_getDiaryDetailInfo	{"articleId":30937596936272}	"msg":"成功"
 文章开放搜索	/app/api/search/HomeSearchAction_searchArticleList	{"default":"浪漫","pageSize":10,"category":[8,9],"pageNum":1}	"msg":"成功"
 社区发现列表	/app/api/community/find_recommendsNotes	{"pageNum":1,"pageSize":10}	"msg":"成功"
 案例详情	/app/api/article/ArticleAction_allCaseDetailInfo	{"articleId":6036}	"msg":"成功"
