@@ -11,3 +11,6 @@
 用户个人主页	/app/api/user/HomeInfoAction_userHomeInfo	{"userId":57701,"showDiary":0}	"msg":"成功"
 场地详情	/app/api/seller/SellerAction_placeDetailInfoV1	{"sellerId":576}	"msg":"成功"
 商家开放搜索	/app/api/search/HomeSearchAction_searchSellerList	{"default":"尼克","latitude":40.004338628000198,"longitude":116.42306459382505,"pageSize":10,"pageNum":1}	"msg":"成功"
+App配置信息	/app/api/config/AppConfigAction_appconfig
+
+	
