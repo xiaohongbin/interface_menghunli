@@ -41,7 +41,7 @@
 		<!--指定 jmeter环境，输出jtl结果路径-->
         <jmeter jmeterhome="${jmeter.home}" resultlog="${menghunli.jmeter.result.jtlName}">
             <!-- 指定脚本路径。"*.jmx"指包含此目录下的所有jmeter脚本-->
-            <testplans dir="${menghunli_script}" includes="*.jmx" />
+            <testplans dir="${menghunli_script}" includes="menghunli.jmx" />
 			<property name="jmeter.save.saveservice.output_format" value="xml"/>
         </jmeter>
     </target>
